@@ -1,40 +1,39 @@
 const TelegramApi = require('node-telegram-bot-api');
 const {buttonOptions, daySchedule} = require('./options');
 const {firstWeek} = require('./schedule');
+const commandsDictionary = require('./commands-dictionary');
+let usersDB = require('./users');
+const {getGroup} = require("./data");
 const token = '5961793778:AAHmaqiJnYGMoh5aPnsbv3MdtYIR012Bdjc';
 const bot = new TelegramApi(token, {polling: true});
 
-
 const start =   () => {
-
-
-
+    console.log('bot started');
      bot.setMyCommands([
-        {command: '/start', description: 'Запустить бота'},
-        {command: '/info', description: 'Информация'},
-        {command: '/week', description: 'Выбрать неделю'},
+         {command: '/start', description: 'Запустить бота'},
+         {command: '/info', description: 'Информация'},
+         {command: '/day', description: 'Расписание на сегодня'},
+         {command: '/week', description: 'Расписание на неделю'},
+         {command: '/time',description: 'Показывает время до конца урока'},
     ])
 
-     bot.on('message', async msg => {
-    const text = msg.text;     // получаем сообщение, которое отправил польз
-    const chatID = msg.chat.id;  // получем айди чата
-    if (text === '/start') {
-        await bot.sendSticker(chatID, 'https://tlgrm.eu/_/stickers/b8e/030/b8e030b6-a4b6-3cac-b5a9-1d30c04d83d8/5.webp')
-        await bot.sendMessage(chatID, `Добро пожаловать, студент КПИ!`)
-    }
-     if (text === '/info') return bot.sendMessage(chatID, `С помощью этого бота ты сможешь узнать расписание на день, неделю, а также узнать, сколько времени осталось до конца текущего урока`)
-     if (text === '/week') {
-        await bot.sendMessage(chatID, 'Выбери неделю', buttonOptions);
-        console.log(msg)
+    bot.on('message', async msg => {
+        const text = msg.text;     // получаем сообщение, которое отправил польз
+        const chatID = msg.chat.id;  // получем айди чата
+        try{
+            commandsDictionary[text](bot,chatID,usersDB);
+        }catch (e){}
+
+        if(text.split('').indexOf('-') === 2){
+            let groupId = await getGroup(text);
+            usersDB[chatID] = {};
+            usersDB[chatID].groupId = groupId;
+            bot.sendMessage(chatID,'Я запомнил');
+            // console.log(usersDB[chatID]);
         }
-    else return bot.sendMessage(chatID, 'Не знаю такой комманды!');
-        console.log(msg)
+
+
     })
-    //  bot.on('callback_query',  msg => {
-    //     const id = msg.message.chat.id;
-    //     const week = msg.data;
-    //     return bot.sendMessage(id, 'Что дальше?', daySchedule)
-    // })
 }
 
 
