@@ -27,7 +27,7 @@ const getGroup = async(groupName) => {
 }
 
 
-  // Вот расписание на вторник для ІМ-21
+// Вот расписание на вторник для ІМ-21
 
 
 
@@ -42,25 +42,34 @@ const getGroup = async(groupName) => {
 //
 // Time()  // Получаем текущее врея
 //
-// const getWeek = async() => {
-//   const currentWeek = await axios.get('https://schedule.kpi.ua/api/time/current').then(res => console.log(res.data.data.currentWeek));
-// }
+const getWeek = async() => {
+  return await axios.get('https://schedule.kpi.ua/api/time/current').then(res => res.data.data.currentWeek);
+}
 // getWeek()   // Получаем текущую неделю
 //
 const getDay = async() => {
     const currentDay = await axios.get('https://schedule.kpi.ua/api/time/current')
-      .then(res => res.data.data.currentDay-1);
+        .then(res => res.data.data.currentDay-1);
     return currentDay;
 }
 
-const getScheduleForToday = async(groupId,day) => {
-    return await axios.get(`https://schedule.kpi.ua/api/schedule/lessons?`,{
-        params: {
-            groupId : groupId,
-        }
-    }).then(response => {
-        return response.data.data.scheduleFirstWeek[day]
-    }).catch(err => console.log(err));
+const getScheduleForToday = async(groupId,day, week) => {
+    if (week === 1) {
+        return await axios.get(`https://schedule.kpi.ua/api/schedule/lessons?`,{
+            params: {
+                groupId : groupId,
+            }
+        }).then(response => {
+            return response.data.data.scheduleFirstWeek[day]
+        }).catch(err => console.log(err));
+    } else
+        return await axios.get(`https://schedule.kpi.ua/api/schedule/lessons?`,{
+            params: {
+                groupId : groupId,
+            }
+        }).then(response => {
+            return response.data.data.scheduleSecondWeek[day]
+        }).catch(err => console.log(err));
 }
 
 //
@@ -74,20 +83,19 @@ const getScheduleForToday = async(groupId,day) => {
 // let currentWeek = '1'
 //
 //
-// const getScheduleForWeek = async() => {
-//   if (currentWeek === `1`) {
-//     await axios.get(`https://schedule.kpi.ua/api/schedule/lessons?groupId=373a8219-53e0-4232-b550-ee0175941486
-// `).then( res => console.log(res.data.data.scheduleFirstWeek))
-//   } else {
-//     await axios.get(`https://schedule.kpi.ua/api/schedule/lessons?groupId=373a8219-53e0-4232-b550-ee0175941486
-// `).then( res => console.log(res.data.data.scheduleSecondWeek))
-//   }
-//
-// }
+const getScheduleForWeek = async(groupId, week) => {
+  if (week === 1) {
+    return await axios.get(`https://schedule.kpi.ua/api/schedule/lessons?groupId=${groupId}
+`).then( res => res.data.data.scheduleFirstWeek)
+  } else {
+    await axios.get(`https://schedule.kpi.ua/api/schedule/lessons?groupId=${groupId}
+`).then( res => res.data.data.scheduleSecondWeek)
+  }
+}
 //
 // getScheduleForWeek()// Расписание на неделю
 
-module.exports = {getGroup, getDay, getScheduleForToday}
+module.exports = {getGroup, getDay, getScheduleForToday, getWeek, getScheduleForWeek}
 
 
 
@@ -133,14 +141,3 @@ module.exports = {getGroup, getDay, getScheduleForToday}
 // }
 //
 // getScheduleForWeek()// Расписание на неделю
-
-
-
-
-
-
-
-
-
-
-
