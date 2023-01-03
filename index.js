@@ -27,7 +27,7 @@ const start =   () => {
             bot.sendMessage(chatID,'Я запомнил');
             // console.log(usersDB[chatID]);
         }
-        try{
+        try {
             commandsDictionary[text](bot,chatID,usersDB);
         } catch (e){}
     })

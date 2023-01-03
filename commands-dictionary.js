@@ -1,4 +1,4 @@
-const {getDay, getScheduleForToday, getWeek, getScheduleForWeek} = require("./data");
+const {getDay, getScheduleForToday, getWeek, getScheduleForWeek, getTime} = require("./data");
 const usersDB = require('./users')
 
 module.exports = commandsDictionary = {
@@ -15,7 +15,7 @@ module.exports = commandsDictionary = {
         console.log(usersDB)
         let pairs = [];
         let message = 'Расписание на сегодня:\n';
-        const week = getWeek();
+        const week = await getWeek();
         try{
             const groupId = usersDB[chatID].groupId;
             const day = await getDay();
@@ -38,11 +38,14 @@ module.exports = commandsDictionary = {
             let id = usersDB[chatID].groupId;
             let week = await getWeek();
             let schedule = await getScheduleForWeek(id, week);
+            let count = 1;
             for (const day of schedule) {
                 message += day.day + ':' + '\n' + '\n';
                 for (const pair of day.pairs) {
-                    message += pair.teacherName + '\n' + pair.name + '\n' + pair.type + '\n'  + pair.time + '\n' + '\n';
+                    message += count + ')'  +  pair.teacherName + '\n' + pair.name + '\n' + pair.type + '\n'  + pair.time + '\n' + '\n';
+                    count++;
                 }
+                count = 1;
             }
             console.log(schedule[0].pairs);
             console.log(schedule);
@@ -50,7 +53,14 @@ module.exports = commandsDictionary = {
         } catch (e) {console.log('Error')}
         await bot.sendMessage(chatID, 'It is schedule for week')
         await bot.sendMessage(chatID, message)
-
+    },
+    '/time': async function(bot, chatID, usersDB) {
+        const day = await getDay();
+        let id = usersDB[chatID].groupId;
+        const time = await getTime();
+        let week = await getWeek();
+        console.log(time)
+        await bot.sendMessage(chatID, 'Time')
     }
 
 }

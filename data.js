@@ -35,10 +35,9 @@ const getGroup = async(groupName) => {
 
 
 //
-// const Time = async () => {
-//   const time = await axios.get('https://timeapi.io/api/Time/current/zone?timeZone=Europe/Kiev').then(res => res.data.time);
-//   console.log(time)
-// }
+const getTime = async () => {
+  return await axios.get('https://timeapi.io/api/Time/current/zone?timeZone=Europe/Kiev').then(res => res.data.time);
+}
 //
 // Time()  // Получаем текущее врея
 //
@@ -72,17 +71,7 @@ const getScheduleForToday = async(groupId,day, week) => {
         }).catch(err => console.log(err));
 }
 
-//
-// getDay()  // Получаем день недели
-//
-// const getLesson = async() => {
-//   const currentLesson = axios.get('https://schedule.kpi.ua/api/time/current').then(res => console.log(res.data.data.currentLesson));
-// }
-// getLesson()   // Получаем номер урока
-//
-// let currentWeek = '1'
-//
-//
+
 const getScheduleForWeek = async(groupId, week) => {
   if (week === 1) {
     return await axios.get(`https://schedule.kpi.ua/api/schedule/lessons?groupId=${groupId}
@@ -92,10 +81,9 @@ const getScheduleForWeek = async(groupId, week) => {
 `).then( res => res.data.data.scheduleSecondWeek)
   }
 }
-//
-// getScheduleForWeek()// Расписание на неделю
 
-module.exports = {getGroup, getDay, getScheduleForToday, getWeek, getScheduleForWeek}
+
+module.exports = {getGroup, getDay, getScheduleForToday, getWeek, getScheduleForWeek, getTime}
 
 
 
