@@ -1,10 +1,12 @@
 const TelegramApi = require('node-telegram-bot-api');
-
-const commandsDictionary = require('./commands-dictionary');
-let usersDB = require('./users');
-const {getGroup} = require("./data");
 const token = '5961793778:AAHmaqiJnYGMoh5aPnsbv3MdtYIR012Bdjc';
 const bot = new TelegramApi(token, {polling: true});
+
+const commandsDictionary = require('./commands-dictionary');   // ?
+let usersDB = require('./users');                               // ?
+const {getGroup} = require("./data");
+
+
 
 const start =   () => {
     console.log('bot started');
@@ -27,13 +29,12 @@ const start =   () => {
             bot.sendMessage(chatID,'Я запомнил');
             // console.log(usersDB[chatID]);
         }
-        try {
+        try
+        {
             commandsDictionary[text](bot,chatID,usersDB);
-        } catch (e){}
+        } catch (e){ 'Error occured!'}
     })
 }
 
-
-//${firstWeek[day][1]}\n ${firstWeek[day][2]}\n ${firstWeek[day][3]}\n
-
 start();
+
