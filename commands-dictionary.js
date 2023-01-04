@@ -1,4 +1,4 @@
-const {getDay, getScheduleForToday, getWeek, getScheduleForWeek, getTime, getLesson} = require("./data");
+const {getDay, getScheduleForToday, getWeek, getScheduleForWeek, getTime, getLesson, getGroup} = require("./data");
 const usersDB = require('./users')
 const pairs = require('./pairs')
 
@@ -52,12 +52,12 @@ module.exports = commandsDictionary = {
         }
     },
     '/time': async function (bot, chatID, usersDB) {
-
+try {
     let id = usersDB[chatID].groupId;
-    let lesson = await getLesson();
+    let lessonNumber = await getLesson();
     let currentTime = await getTime();
     let time = parseFloat(currentTime.replace(':', '.'))
-    const startTime = pairs[lesson];
+    const startTime = pairs[lessonNumber];
     console.log(time - startTime)
     console.log(startTime)
     console.log(currentTime)
@@ -65,7 +65,20 @@ module.exports = commandsDictionary = {
     let minutes = 30 - parseInt(currentTime.slice(3, 5)) + parseInt(startTime.slice(3, 5));
     if (hours < 0 || minutes < 0) bot.sendMessage(chatID, 'Урок уже закончился!')
     else bot.sendMessage(chatID, `До конца урока осталось ${hours} часов ${minutes} минут`)
-
+} catch(e){}
     },
-
+    '/now' : async function (bot, chatID, usersDB) {
+        try {
+            let week = await getWeek();
+            week++;
+            let day = await getDay();
+            let lessonNumber = await getLesson();
+            let scheduleForToday = await getScheduleForToday(usersDB[chatID].groupId, week);
+            let currentLesson = scheduleForToday.pairs[lessonNumber-1].name;
+            await bot.sendMessage(chatID, `Сейчас у тебя ${currentLesson} !`);
+        } catch(e){
+            bot.sendMessage(chatID, 'Урока нет!')
+            // bot.sendSticker(chatID, )   // Здесь должен быть празднующий стикер) чуть позже добавлю
+        }
+    }
 }

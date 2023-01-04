@@ -16,6 +16,7 @@ const start =   () => {
         {command: '/day', description: 'Расписание на сегодня'},
         {command: '/week', description: 'Расписание на неделю'},
         {command: '/time',description: 'Показывает время до конца урока'},
+        {command: '/now',description: 'Показывает текущий урок'},
     ])
 
     bot.on('message', async msg => {
