@@ -1,5 +1,6 @@
 const TelegramApi = require('node-telegram-bot-api');
-const token = '5961793778:AAHmaqiJnYGMoh5aPnsbv3MdtYIR012Bdjc';
+const token = '5814675738:AAFVKIa1Shtql0DL0ShacWnrikGsDwtIVXc' +
+    '';
 const bot = new TelegramApi(token, {polling: true});
 
 const commandsDictionary = require('./commands-dictionary');   // ?
@@ -27,7 +28,7 @@ const start =   () => {
             usersDB[chatID] = {};
             usersDB[chatID].groupId = groupId;
             console.log(usersDB)
-            bot.sendMessage(chatID,'Я запомнил');
+            bot.sendMessage(chatID,`Твоя группа - ${text}. Если возникла ошибка, напиши снова свою группу в формате XX-XX`);
             // console.log(usersDB[chatID]);
         }
         try

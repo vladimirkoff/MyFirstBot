@@ -106,23 +106,3 @@ const getLesson = async() => {
 module.exports = {getGroup, getDay, getScheduleForToday, getWeek, getScheduleForWeek, getTime, getLesson}
 
 
-const test = async(groupId,day = 3, week = 1) => {
-    if (week === 1) {
-        return await axios.get(`https://schedule.kpi.ua/api/schedule/lessons?`,{
-            params: {
-                groupId : groupId,
-            }
-        }).then(response => {
-            console.log(response.data.data.scheduleFirstWeek[day])
-        }).catch(err => console.log(err));
-    } else
-        return await axios.get(`https://schedule.kpi.ua/api/schedule/lessons?`,{
-            params: {
-                groupId : groupId,
-            }
-        }).then(response => {
-            return response.data.data.scheduleSecondWeek[day]
-        }).catch(err => console.log(err));
-}
-
-test('373a8219-53e0-4232-b550-ee0175941486')
