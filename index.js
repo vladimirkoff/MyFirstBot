@@ -20,11 +20,10 @@ const start =   () => {
     ])
 
     bot.on('message', async msg => {
-        const text =  msg.text;
+        const text =  msg.text.replace('@kpiSche_duleBoT','');
         const chatID = msg.chat.id;
-        console.log(text)
         if(text.split('').indexOf('-') === 2){
-            let groupId = await getGroup(text);
+            const groupId = await getGroup(text);
             usersDB[chatID] = {};
             usersDB[chatID].groupId = groupId;
             console.log(usersDB)

@@ -24,9 +24,14 @@ module.exports = commandsDictionary = {
             pairs.pairs.forEach(pair=> {
                 message = message + '—' + pair.time + ' ' + pair.teacherName + ' '+ pair.type+ ' ' + pair.name +  '\n' + '\n';
                 //,' ',pair.teacherName, ' ', pair.type, ' ',pair.name
-            })
-            await bot.sendSticker(chatID, 'https://tlgrm.ru/_/stickers/b8e/030/b8e030b6-a4b6-3cac-b5a9-1d30c04d83d8/2.webp');
-            await bot.sendMessage(chatID,message);
+            });
+            if(message.length === 23){
+                await bot.sendSticker(chatID, 'https://tlgrm.ru/_/stickers/b8e/030/b8e030b6-a4b6-3cac-b5a9-1d30c04d83d8/2.webp');
+                await bot.sendMessage(chatID,'Сегодня уроков нету!');
+            }else{
+                await bot.sendSticker(chatID, 'https://tlgrm.ru/_/stickers/b8e/030/b8e030b6-a4b6-3cac-b5a9-1d30c04d83d8/2.webp');
+                await bot.sendMessage(chatID,message);
+            }
         } catch (e)
         {
             await bot.sendSticker(chatID, 'https://tlgrm.ru/_/stickers/b8e/030/b8e030b6-a4b6-3cac-b5a9-1d30c04d83d8/4.webp');
@@ -37,8 +42,8 @@ module.exports = commandsDictionary = {
         try {
         let message = 'Расписание на неделю: \n';
             let id = usersDB[chatID].groupId;
-            let week = await getWeek();
-            week++;  // Почему-то апи выдает неделю 0, из-за чего летит программа
+            let week = await getWeek() + 1;
+            // week++;  // Почему-то апи выдает неделю 0, из-за чего летит программа
             let schedule = await getScheduleForWeek(id, week);
             let count = 1;
             for (const day of schedule) {
