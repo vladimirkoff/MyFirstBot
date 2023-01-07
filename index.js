@@ -1,6 +1,5 @@
 const TelegramApi = require('node-telegram-bot-api');
-const token = '5814675738:AAFVKIa1Shtql0DL0ShacWnrikGsDwtIVXc' +
-    '';
+const token = '5814675738:AAFVKIa1Shtql0DL0ShacWnrikGsDwtIVXc';
 const bot = new TelegramApi(token, {polling: true});
 
 const commandsDictionary = require('./commands-dictionary');   // ?
@@ -21,8 +20,9 @@ const start =   () => {
     ])
 
     bot.on('message', async msg => {
-        const text = msg.text;     // получаем сообщение, которое отправил польз
-        const chatID = msg.chat.id;  // получем айди чата
+        const text =  msg.text;
+        const chatID = msg.chat.id;
+        console.log(text)
         if(text.split('').indexOf('-') === 2){
             let groupId = await getGroup(text);
             usersDB[chatID] = {};
